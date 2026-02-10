@@ -4,7 +4,7 @@ Starter code for HW2 of EECS 498/598 Computer Graphics and Generative Models.
 
 ## Build
 
-To build this project using the CMakeLists.txt provided, create a `build` directory, and call cmake from inside of the build directory.
+To build this project using the CMakeLists.txt provided, enter the `raytracer` directory. Create a `build` directory, and call cmake from inside of the build directory.
 
 ```bash
 mkdir build
@@ -18,7 +18,7 @@ Then you can call make from inside of the build folder to compile the project.
 make
 ```
 
-To run the project, use the following command. Be sure to run it from inside of the main directory, otherwise the project will not recognize the object files.
+To run the project, use the following command. Be sure to run it from inside of the `raytracer` directory, otherwise the project will not recognize the object files.
 
 ```bash
 ./build/RayTracer

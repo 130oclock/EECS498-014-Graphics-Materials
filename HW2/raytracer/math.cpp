@@ -1,6 +1,5 @@
 #include "math.hpp"
 #include "config.hpp"
-#include "raytracer.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -141,12 +140,4 @@ Vec3 localDirToWorld(const Vec3& direction, const Vec3& normal) {
     Vec3 res = tangent * direction.x + bitangent * direction.y + normal * direction.z;
     res.normalize();
     return res;
-}
-
-Vec3 Random::randomHemisphereDirection(const Vec3 &normal) {
-    return randomHemisphereDirection_impl(normal);
-}
-
-Vec3 Random::cosWeightedHemisphere(const Vec3 &normal) {
-    return cosWeightedHemisphere_impl(normal);
 }

@@ -1,6 +1,5 @@
 #include "scene.hpp"
 #include "config.hpp"
-#include "raytracer.hpp"
 
 #include <iostream>
 #include <filesystem>
@@ -8,10 +7,6 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "../thirdparty/tinyobj/tiny_obj_loader.h"
 
-
-Vec3 Scene::trace(const Ray &ray, int bouncesLeft, bool discardEmission) {
-    return trace_impl(ray, bouncesLeft, discardEmission);
-}
 
 tinyobj::ObjReader Scene::reader {};
 

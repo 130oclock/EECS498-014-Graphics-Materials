@@ -1,10 +1,12 @@
-#include "raytracer.hpp"
+#include "ray.hpp"
+#include "math.hpp"
+#include "scene.hpp"
 #include "config.hpp"
 
 #include <cassert>
 
 // TODO
-Vec3 trace_impl(const Ray &ray, int bouncesLeft, bool discardEmission) {
+Vec3 Scene::trace(const Ray &ray, int bouncesLeft, bool discardEmission) {
     if constexpr(DEBUG) {
         assert(ray.isNormalized());
     }
@@ -16,7 +18,7 @@ Vec3 trace_impl(const Ray &ray, int bouncesLeft, bool discardEmission) {
 }
 
 // TODO
-Vec3 randomHemisphereDirection_impl(const Vec3 &normal) {
+Vec3 Random::randomHemisphereDirection(const Vec3 &normal) {
     /* 
         Uniformly generate a direction on the hemisphere oriented towards the positive y axis,
             represented by sphere coordinates
@@ -33,7 +35,7 @@ Vec3 randomHemisphereDirection_impl(const Vec3 &normal) {
 }
 
 // TODO
-Vec3 cosWeightedHemisphere_impl(const Vec3 &normal) {
+Vec3 Random::cosWeightedHemisphere(const Vec3 &normal) {
     /* 
         Generate a direction on the hemisphere oriented towards the positive y axis, 
             cosine-weighted by the elevation angle.
