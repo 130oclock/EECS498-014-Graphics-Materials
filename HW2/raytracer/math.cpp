@@ -143,12 +143,10 @@ Vec3 localDirToWorld(const Vec3& direction, const Vec3& normal) {
     return res;
 }
 
-// TODO
 Vec3 Random::randomHemisphereDirection(const Vec3 &normal) {
     return randomHemisphereDirection(normal);
 }
 
-// TODO
 Vec3 Random::cosWeightedHemisphere(const Vec3 &normal) {
     return cosWeightedHemisphere(normal);
 }
