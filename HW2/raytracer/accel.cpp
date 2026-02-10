@@ -1,5 +1,5 @@
-#include "accel.h"
-#include "config.h"
+#include "accel.hpp"
+#include "config.hpp"
 
 #include <cassert>
 #include <algorithm>

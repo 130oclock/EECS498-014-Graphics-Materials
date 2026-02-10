@@ -42,6 +42,8 @@ Vec3 operator-(const Vec3 &rhs);
 
 std::ostream& operator<<(std::ostream& os, const Vec3& v);
 
+Vec3 localDirToWorld(const Vec3& direction, const Vec3& normal);
+
 class Random {
     static std::mt19937 generator;
     static std::uniform_real_distribution<float> distribution;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../thirdparty/tinyobj/tiny_obj_loader.h"
-#include "accel.h"
+#include "accel.hpp"
 
 #include <string>
 #include <vector>

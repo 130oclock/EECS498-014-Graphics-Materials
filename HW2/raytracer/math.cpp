@@ -1,5 +1,6 @@
-#include "math.h"
-#include "config.h"
+#include "math.hpp"
+#include "config.hpp"
+#include "raytracer.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -144,34 +145,10 @@ Vec3 localDirToWorld(const Vec3& direction, const Vec3& normal) {
 
 // TODO
 Vec3 Random::randomHemisphereDirection(const Vec3 &normal) {
-    /* 
-        Uniformly generate a direction on the hemisphere oriented towards the positive y axis,
-            represented by sphere coordinates
-    */
-    float azimuth = 0.0f;
-    float elevation = 0.0f;
-
-    // Convert spherical coordinates to Cartesian
-    float x = cos(azimuth) * sin(elevation);
-    float y = sin(azimuth) * sin(elevation);
-    float z = cos(elevation);
-
-    return localDirToWorld({x, y, z}, normal);
+    return randomHemisphereDirection(normal);
 }
 
 // TODO
 Vec3 Random::cosWeightedHemisphere(const Vec3 &normal) {
-    /* 
-        Generate a direction on the hemisphere oriented towards the positive y axis, 
-            cosine-weighted by the elevation angle.
-    */
-    float azimuth = 0.0f;
-    float elevation = 0.0f;
-
-    // Convert spherical coordinates to Cartesian
-    float x = cos(azimuth) * sin(elevation);
-    float y = sin(azimuth) * sin(elevation);
-    float z = cos(elevation);
-
-    return localDirToWorld({x, y, z}, normal);
+    return cosWeightedHemisphere(normal);
 }

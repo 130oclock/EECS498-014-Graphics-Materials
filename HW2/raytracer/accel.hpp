@@ -1,7 +1,7 @@
 #pragma once
 
-#include "math.h"
-#include "ray.h"
+#include "math.hpp"
+#include "ray.hpp"
 
 #include <vector>
 

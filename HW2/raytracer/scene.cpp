@@ -1,5 +1,6 @@
-#include "scene.h"
-#include "config.h"
+#include "scene.hpp"
+#include "config.hpp"
+#include "raytracer.hpp"
 
 #include <iostream>
 #include <filesystem>
@@ -8,16 +9,8 @@
 #include "../thirdparty/tinyobj/tiny_obj_loader.h"
 
 
-// TODO
 Vec3 Scene::trace(const Ray &ray, int bouncesLeft, bool discardEmission) {
-    if constexpr(DEBUG) {
-        assert (ray.isNormalized());
-    }
-    if (bouncesLeft < 0) return {};
-
-    // TODO...
-    
-    return {};
+    return trace(ray, bouncesLeft, discardEmission);
 }
 
 tinyobj::ObjReader Scene::reader {};
