@@ -70,6 +70,14 @@ Vec3 operator*(Vec3 lhs, float rhs) { return (lhs *= rhs); }
 Vec3 operator*(float lhs, Vec3 rhs) { return (rhs *= lhs); }
 Vec3 operator/(Vec3 lhs, float rhs) { return (lhs /= rhs); }
 
+Vec3 operator*(Vec3 lhs, const Vec3 &rhs) {
+    return {
+        lhs.x * rhs.x,
+        lhs.y * rhs.y,
+        lhs.z * rhs.z
+    };
+}
+
 Vec3 operator+(const Vec3 &rhs) {
     Vec3 vector;
     vector.x = +rhs.x;
