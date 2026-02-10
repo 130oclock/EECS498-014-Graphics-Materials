@@ -10,7 +10,7 @@
 
 
 Vec3 Scene::trace(const Ray &ray, int bouncesLeft, bool discardEmission) {
-    return trace(ray, bouncesLeft, discardEmission);
+    return trace_impl(ray, bouncesLeft, discardEmission);
 }
 
 tinyobj::ObjReader Scene::reader {};
