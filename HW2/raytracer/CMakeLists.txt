@@ -3,7 +3,4 @@ project(RayTracer)
 
 set(CMAKE_CXX_STANDARD 17)
 
-# Add the executable with the source files
-file(GLOB SOURCES "*.cpp")
-
-add_executable(RayTracer ${SOURCES})
+add_executable(RayTracer main.cpp ray.cpp math.cpp scene.cpp accel.cpp raytracer_impl.cpp)

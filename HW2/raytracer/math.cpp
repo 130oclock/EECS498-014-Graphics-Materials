@@ -110,11 +110,10 @@ float Vec3::getLength() const {
     return std::sqrt(x * x + y * y + z * z);
 }
 
-void Vec3::normalize() {
+Vec3 &Vec3::normalize() {
     float len = getLength();
-    x /= len;
-    y /= len;
-    z /= len;
+    assert(len != 0);
+    return (*this /= len);
 }
 
 std::ostream& operator<<(std::ostream& os, const Vec3& v) {
