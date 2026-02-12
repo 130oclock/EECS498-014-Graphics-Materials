@@ -33,3 +33,7 @@ public:
     Vec3 trace(const Ray& ray, int bouncesLeft = 2, bool discardEmission = false);
     ~Scene();
 };
+
+void spawnRays(size_t width, size_t height, Vec3 cameraPosition, Scene &scene, std::vector<std::vector<Vec3>> &image);
+
+void UpdateProgress(float progress);

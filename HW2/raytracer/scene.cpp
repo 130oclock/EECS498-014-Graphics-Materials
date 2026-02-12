@@ -97,3 +97,27 @@ Scene::~Scene() {
         delete obj;
     }
 }
+
+void UpdateProgress(float progress)
+{
+    static bool checkPoints[10] = {false};
+    if constexpr(DEBUG) {
+        int barWidth = 32;
+
+        std::cout << "[";
+        int pos = barWidth * progress;
+        for (int i = 0; i < barWidth; ++i) {
+            if (i < pos) std::cout << "=";
+            else if (i == pos) std::cout << ">";
+            else std::cout << " ";
+        }
+        std::cout << "] " << int(progress * 100.0) << " %\r";
+        std::cout.flush();
+    } else {
+        int index = progress * 10;
+        if (!checkPoints[index]) {
+            std::cout << index * 10 << "%\n";
+            checkPoints[index] = true;
+        }
+    }
+};

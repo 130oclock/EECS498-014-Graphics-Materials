@@ -8,30 +8,6 @@
 
 constexpr float GAMMA = 0.6f;
 
-void UpdateProgress(float progress)
-{
-    static bool checkPoints[10] = {false};
-    if constexpr(DEBUG) {
-        int barWidth = 32;
-
-        std::cout << "[";
-        int pos = barWidth * progress;
-        for (int i = 0; i < barWidth; ++i) {
-            if (i < pos) std::cout << "=";
-            else if (i == pos) std::cout << ">";
-            else std::cout << " ";
-        }
-        std::cout << "] " << int(progress * 100.0) << " %\r";
-        std::cout.flush();
-    } else {
-        int index = progress * 10;
-        if (!checkPoints[index]) {
-            std::cout << index * 10 << "%\n";
-            checkPoints[index] = true;
-        }
-    }
-};
-
 inline float toneMap(float x) {
     return (x * (2.51f * x + 0.03f)) / (x * (2.43f * x + 0.59f) + 0.14f);
 }
@@ -60,29 +36,7 @@ int main() {
         std::cout << "Debug mode disabled. Progress output will be in brief." <<  '\n';
     }
 
-    // x: right
-    // y: up
-    // z: outwards
-    for (size_t y = 0; y < height; y++) {
-        for (size_t x = 0; x < width; x++) {
-            Vec3 worldPos = {
-                (float)x / width - 0.5f, 
-                1.5f - (float)y / height,
-                (cameraPos.z + 1.0f) / 2
-            };
-            Ray ray {
-                cameraPos,
-                worldPos - cameraPos,
-            };
-            ray.dir.normalize();
-            Vec3 value {};
-            for (int i = 0; i < SPP; i++) {
-                value += scene.trace(ray, MAX_DEPTH);
-            }
-            image[y][x] = value / SPP;
-            UpdateProgress((float)(y * width + x) / (width * height));
-        }
-    }
+    spawnRays(width, height, cameraPos, scene, image);
     std::cout << std::endl;
 
     auto finishTime = high_resolution_clock::now();

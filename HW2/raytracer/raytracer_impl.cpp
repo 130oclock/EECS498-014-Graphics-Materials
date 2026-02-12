@@ -7,6 +7,21 @@
 #include <cassert>
 
 // TODO
+void spawnRays(size_t width, size_t height, Vec3 cameraPosition, Scene &scene, std::vector<std::vector<Vec3>> &image) {
+    for (size_t y = 0; y < height; y++) {
+        for (size_t x = 0; x < width; x++) {
+            Vec3 pixel = {(float)x + 0.5f, (float)y + 0.5f, 0.0f};
+            Vec3 color;
+
+            // TODO...
+
+            image[y][x] = color;
+            UpdateProgress((float)(y * width + x) / (width * height));
+        }
+    }
+}
+
+// TODO
 Vec3 Scene::trace(const Ray &ray, int bouncesLeft, bool discardEmission) {
     if constexpr(DEBUG) {
         assert(ray.isNormalized());
@@ -24,7 +39,7 @@ Vec3 Random::randomHemisphereDirection(const Vec3 &normal) {
         Uniformly generate a direction on the hemisphere oriented towards the positive y axis,
             represented by sphere coordinates
     */
-    float azimuth = 0.0f;
+    float azimuth =   0.0f;
     float elevation = 0.0f;
 
     // Convert spherical coordinates to Cartesian
@@ -41,7 +56,7 @@ Vec3 Random::cosWeightedHemisphere(const Vec3 &normal) {
         Generate a direction on the hemisphere oriented towards the positive y axis, 
             cosine-weighted by the elevation angle.
     */
-    float azimuth = 0.0f;
+    float azimuth =   0.0f;
     float elevation = 0.0f;
 
     // Convert spherical coordinates to Cartesian
