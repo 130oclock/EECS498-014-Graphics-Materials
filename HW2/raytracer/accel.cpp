@@ -14,10 +14,10 @@ BoundingBox BoundingBox::boxUnion(const BoundingBox& b1, const BoundingBox& b2) 
     };
 }
 
-BoundingBox BoundingBox::constructFromMesh(const Mesh &mesh) {
+BoundingBox BoundingBox::constructFromTriangle(const Triangle &triangle) {
     return {
-        Vec3::minOfTwo(Vec3::minOfTwo(mesh.a, mesh.b), mesh.c), 
-        Vec3::maxOfTwo(Vec3::maxOfTwo(mesh.a, mesh.b), mesh.c)
+        Vec3::minOfTwo(Vec3::minOfTwo(triangle.a, triangle.b), triangle.c), 
+        Vec3::maxOfTwo(Vec3::maxOfTwo(triangle.a, triangle.b), triangle.c)
     };
 }
 
@@ -88,24 +88,24 @@ Intersection Object::sample() const {
     size_t idx = 0;
     float sampleArea = Random::randUniformFloat() * area;
     while (true) {
-        currentArea += meshes[idx].area;
+        currentArea += triangles[idx].area;
         if (currentArea + std::numeric_limits<float>::epsilon() >= sampleArea) break;
         idx++;
     }
-    Intersection inter;
-    inter.happened = true;
-    inter.mesh = &meshes[idx];
-    inter.object = this;
-    inter.pos = meshes[idx].sample();
-    return inter;
+    Intersection intersect;
+    intersect.happened = true;
+    intersect.triangle = &triangles[idx];
+    intersect.object = this;
+    intersect.pos = triangles[idx].sample();
+    return intersect;
 }
 
 void Object::constructBoundingBox() {
-    assert (!meshes.empty());
+    assert (!triangles.empty());
 
-    box = BoundingBox::constructFromMesh(meshes[0]);
-    for (size_t i = 1; i < meshes.size(); i++) {
-        box.boxUnion(BoundingBox::constructFromMesh(meshes[i]));
+    box = BoundingBox::constructFromTriangle(triangles[0]);
+    for (size_t i = 1; i < triangles.size(); i++) {
+        box.boxUnion(BoundingBox::constructFromTriangle(triangles[i]));
     }
 }
 
@@ -160,7 +160,7 @@ std::pair<std::vector<Object *>, std::vector<Object *>> BVH::splitObjects(std::v
     };
 }
 
-Mesh::Mesh(const Vec3 &a, const Vec3 &b, const Vec3 &c) 
+Triangle::Triangle(const Vec3 &a, const Vec3 &b, const Vec3 &c) 
     : a(a), b(b), c(c) {
     Vec3 p = b-a, q = c-b;
     normal = Vec3::cross(p, q);
@@ -168,7 +168,7 @@ Mesh::Mesh(const Vec3 &a, const Vec3 &b, const Vec3 &c)
     normal.normalize();
 }
 
-float Mesh::intersect(const Ray &ray) {
+float Triangle::intersect(const Ray &ray) {
     if constexpr(DEBUG) {
         assert (ray.isNormalized());
     }
@@ -177,7 +177,7 @@ float Mesh::intersect(const Ray &ray) {
     // we ignore intersection with the backface
     if (proj > 0) return std::numeric_limits<float>::max();
     
-    // find the plane defined by this triangle mesh
+    // find the plane defined by this triangle
     // plane expression: n dot x + delta = 0
     float delta = Vec3::dot(-normal, a);
 
@@ -185,20 +185,20 @@ float Mesh::intersect(const Ray &ray) {
     if (time < 0) return std::numeric_limits<float>::max();
     
     Vec3 inter = ray.travel(time);
-    if (isPointInsideMesh(inter)) return time;
+    if (isPointInsideTriangle(inter)) return time;
     return std::numeric_limits<float>::max();
 }
 
-Vec3 Mesh::sample() const {
+Vec3 Triangle::sample() const {
     float m = std::sqrt(Random::randUniformFloat()), n = Random::randUniformFloat();
     return a * (1.0f - m) + b * (m * (1.0f - n)) + c * (m * n);
 }
 
-bool Mesh::isPointInsideMesh(const Vec3& point) const {
+bool Triangle::isPointInsideTriangle(const Vec3& point) const {
     Vec3 i = point - a, j = point - b, k = point - c;
     auto isValid = [this](const Vec3& m, const Vec3& n) -> bool {
         return Vec3::dot(Vec3::cross(m, n), normal) > 0;
-        };
+    };
     return isValid(i, j) && isValid(j, k) && isValid(k, i);
 }
 
@@ -208,12 +208,12 @@ Intersection BVHNode::intersect(const Ray &ray) {
     }
     if (isLeaf()) {
         float shortestHitTime = std::numeric_limits<float>::max();
-        Mesh* targetMesh;
-        for (auto& mesh : object->meshes) {
-            float hitTime = mesh.intersect(ray);
+        Triangle* targetTriangle;
+        for (auto& triangle : object->triangles) {
+            float hitTime = triangle.intersect(ray);
             if (hitTime > MIN_TRAVEL_TIME && hitTime < shortestHitTime) {
                 shortestHitTime = hitTime;
-                targetMesh = &mesh;
+                targetTriangle = &triangle;
             }
         }
 
@@ -222,7 +222,7 @@ Intersection BVHNode::intersect(const Ray &ray) {
         Intersection result;
         result.happened = true;
         result.time = shortestHitTime;
-        result.mesh = targetMesh;
+        result.triangle = targetTriangle;
         result.pos = ray.travel(shortestHitTime);
         result.object = object;
         return result;
@@ -243,7 +243,7 @@ bool BVHNode::isLeaf() const {
 }
 
 Vec3 Intersection::getNormal() const {
-    return mesh->normal;
+    return triangle->normal;
 }
 
 Vec3 Intersection::getDiffuseColor() const {
@@ -256,7 +256,7 @@ Vec3 Intersection::getEmission() const {
 
 Vec3 Intersection::calcBRDF(const Vec3& inDir, const Vec3& outDir) const {
     assert (happened);
-    const Vec3& normal = mesh->normal;
+    const Vec3& normal = triangle->normal;
     if (Vec3::dot(inDir, normal) > 0 || Vec3::dot(outDir, normal) < 0) return {};
     // BRDF of a diffuse object
     /*-----------------------------------------------------------*/

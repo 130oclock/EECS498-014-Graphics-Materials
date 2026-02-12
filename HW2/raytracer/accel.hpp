@@ -5,24 +5,24 @@
 
 #include <vector>
 
-class Mesh {
+class Triangle {
 public:
     Vec3 a;
     Vec3 b;
     Vec3 c;
     Vec3 normal;
     float area;
-    Mesh(const Vec3& a, const Vec3& b, const Vec3& c);
+    Triangle(const Vec3& a, const Vec3& b, const Vec3& c);
     /**
-     * returns the time that the ray travels before hitting this mesh
+     * returns the time that the ray travels before hitting this triangle
      * returns FLOAT_MAX if they don't intersect
     */
     float intersect(const Ray& ray);
     /**
-     * @brief sample a random point on the mesh surface
+     * @brief sample a random point on the triangle's surface
     */
     Vec3 sample() const;
-    bool isPointInsideMesh(const Vec3& point) const;
+    bool isPointInsideTriangle(const Vec3& point) const;
 };
 
 class BoundingBox {
@@ -31,7 +31,7 @@ public:
     Vec3 maxCorner;
 
     static BoundingBox boxUnion(const BoundingBox& b1, const BoundingBox& b2);
-    static BoundingBox constructFromMesh(const Mesh&);
+    static BoundingBox constructFromTriangle(const Triangle&);
     void boxUnion(const BoundingBox& other);
 
     enum class Extent {
@@ -60,7 +60,7 @@ class Object {
 public:
     std::string name = ""; // for debug
     BoundingBox box;
-    std::vector<Mesh> meshes;
+    std::vector<Triangle> triangles;
     float area;
     // Vec3 ka; /* ambient color */
     Vec3 kd; /* albedo */
@@ -78,7 +78,7 @@ struct Intersection {
     float time = std::numeric_limits<float>::max();
     const Object* object = nullptr;
     Vec3 pos;
-    const Mesh* mesh = nullptr;
+    const Triangle* triangle = nullptr;
 
     /* helper functions*/
     Vec3 getNormal() const;
