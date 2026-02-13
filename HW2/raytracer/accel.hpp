@@ -14,6 +14,10 @@ public:
     float area;
     Triangle(const Vec3& a, const Vec3& b, const Vec3& c);
     /**
+     * returns the time at which the ray intersects the plane
+    */
+    float timeOfIntersection(const Ray& ray);
+    /**
      * returns the time that the ray travels before hitting this triangle
      * returns FLOAT_MAX if they don't intersect
     */

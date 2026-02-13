@@ -177,11 +177,7 @@ float Triangle::intersect(const Ray &ray) {
     // we ignore intersection with the backface
     if (proj > 0) return std::numeric_limits<float>::max();
     
-    // find the plane defined by this triangle
-    // plane expression: n dot x + delta = 0
-    float delta = Vec3::dot(-normal, a);
-
-    float time = - (delta + Vec3::dot(normal, ray.pos)) / proj;
+    float time = timeOfIntersection(ray);
     if (time < 0) return std::numeric_limits<float>::max();
     
     Vec3 inter = ray.travel(time);

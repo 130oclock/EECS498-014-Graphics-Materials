@@ -22,6 +22,14 @@ void spawnRays(size_t width, size_t height, Vec3 cameraPosition, Scene &scene, s
 }
 
 // TODO
+float timeOfIntersection(const Ray& ray){
+
+    // TODO...
+    
+    return 0.0f;
+}
+
+// TODO
 Vec3 Scene::trace(const Ray &ray, int bouncesLeft, bool discardEmission) {
     if constexpr(DEBUG) {
         assert(ray.isNormalized());
